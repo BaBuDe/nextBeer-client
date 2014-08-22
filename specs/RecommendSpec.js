@@ -1,41 +1,73 @@
 describe('Recommended Ctrl', function() {
 
-    var $scope, $state;
+    var $scope, $location;
+
+
+  // mock out your services
+  var BeerFactoryMock = {
+    trainingBeers: ["beer1", "beer2"],
+    beerRecQueue: ["NattyLightOhYeah", "PBRforTheHipsters"]
+  };
 
   // load the controller's module AND the main app module in this order
-  beforeEach(module('ui.router'));
   beforeEach(module('app'));
   beforeEach(module('app.recommend'));
-  beforeEach(inject(function($injector, $state) {
+
+  // grab any services your controller uses
+  beforeEach(inject(function($injector) {
     BeerFactory = $injector.get('BeerFactory');
-    $state = $injector.get('$state');
+    UtilFactory = $injector.get('UtilFactory');
+    UserFactory = $injector.get('UserFactory');
   }));
 
+  beforeEach(function () {
+    BeerFactoryMock = jasmine.createSpyObj(‘BeerFactoryMock’, [
+      ‘sendRating’, 
+      ‘addToQueue’, 
+      ‘getMyBeers’, 
+      ‘addToMyBeers’, 
+      ‘removeFromMyBeers’,
+      'getSelectedBeer',
+      'navToDetail',
+  ]);
+
+    // $provide registers this mock so you won't need to inject it in the controller below
+    $provide.value('BeerFactory', BeerFactoryMock);
+  });
+
   // inject the required services and instantiate the controller
-  beforeEach(inject(function($_rootScope_, _$controller_) {
+  beforeEach(inject(function($_rootScope_, _$controller_, _$location_) {
     $scope = $_rootScope_.$new();
-    CardsCtrl = _$controller_('CardsCtrl', {
-        $scope: $scope, BeerFactory: BeerFactory
+    $location = _$location_;
+    RecommendCtrl = _$controller_('RecommendCtrl', {
+        $scope: $scope;
     });
   }));
 
-  it('should have /recommend state, template, and controller', function() {
-    expect($state.includes['app.recommend']).toBe(true);
-    expect($state.current['app.recommend'].controller).to.be('CardsCtrl');
-    expect($state.current['app.recommend'].templateUrl).to.be('app/recommend/recommend.html');
+
+  it('should check if the path is active', function() {
+    $location.path('/recommend');
+    expect($location.path()).toBe('/recommend');
   });
-  it('should have a method addCard', function () {
-  	expect(typeof $scope.addCard).toBe('function');
+
+  it('should have a method addRecommendedBeer', function() {
+      expect($scope.addRecommendedBeer).toBeDefined();
+      expect(typeof $scope.addRecommendedBeer).toBe('function');
   });
-  it('should add a beer to $scope.beers when the addCard method is called', function() {
+  it('should add a beer to the queue when addRecommendedBeer is called', function() {
     var newBeer = {data: 'beerName'};
-    $scope.addCard(newBeer);
-    expect($scope.addCard).toHaveBeenCalled();
+    $scope.addRecommendedBeer(newBeer);
+    expect($scope.addRecommendedBeer).toHaveBeenCalled();
     expect($scope.beers).toContain(newBeer);
   });
+  it('should send a rating when the user swipes a card', function() {
+    var beerReview = 1;
+    $scope.cardSwiped();
+    expect(BeerFactory.sendRating).toHaveBeenCalled();
+  });
   it('should have a method cardSwiped', function() {
-  	expect($scope.cardSwiped).toBeDefined();
-  	expect(typeof $scope.cardSwiped).toBe('function');
+    expect($scope.cardSwiped).toBeDefined();
+    expect(typeof $scope.cardSwiped).toBe('function');
   });
   it('should call the BeerFactory\'s addToMyBeers method when cardSwiped is called', function() {
     var beerObj = {beer: 'name'};
@@ -50,8 +82,8 @@ describe('Recommended Ctrl', function() {
     expect(BeerFactory.sendRating).toHaveBeenCalled();
   });
   it('should have a method passSelectedBeer', function() {
-  	expect($scope.passSelectedBeer).toBeDefined();
-  	expect(typeof $scope.passSelectedBeer).toBe('function');
+    expect($scope.passSelectedBeer).toBeDefined();
+    expect(typeof $scope.passSelectedBeer).toBe('function');
     spyOn(BeerFactory, 'passSelectedBeer');
   });
   it('should call the BeerFactory\'s passSelectedBeer method when passSelectedBeer is called', function() {
@@ -63,8 +95,8 @@ describe('Recommended Ctrl', function() {
     expect(BeerFactory.passSelectedBeer).toHaveBeenCalled();
   });
    it('should have a method cardDestroyed', function() {
-  	expect($scope.cardDestroyed).toBeDefined();
-  	expect(typeof $scope.cardDestroyed).toBe('function');
+    expect($scope.cardDestroyed).toBeDefined();
+    expect(typeof $scope.cardDestroyed).toBe('function');
   });
    it('should remove a beer from the queue when carDestroyed method is called', function() {
     var index = 1;
@@ -73,6 +105,6 @@ describe('Recommended Ctrl', function() {
     expect($scope.beers[index]).toBe(null);
    });
   it('uses the BeerFactory method beerRecQueue to get cards', function () {
-  	expect($scope.cards.length).not.toBe(0);
+    expect($scope.cards.length).not.toBe(0);
   });
 });
