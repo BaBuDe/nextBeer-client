@@ -270,7 +270,7 @@
 
     _doDragEnd: function(e) {
       // console.log("drag dist", dragThreshold);
-      if (dragThreshold > 60) {
+      if (dragThreshold > 45) {
         this.transitionOut(e);
         //snap back if not dragged far enough
       } else {
