@@ -2,12 +2,12 @@
   var slides = [{
     title: "NextBeer Learns Your Preferences",
     items: ["Swipe right on beers you like or want to try.", "Swipe left on the rest!"],
-    img: "./dist/img/beer_queue.png",
+    img: "./dist/img/recommend.png",
     imgDesciption: ""
   }, {
     title: "Discover New Beers",
     items: ["Now you can scroll through your personalized recommendations.", "Click any beer to see its details"],
-    img: "./dist/img/beer_details.png",
+    img: "./dist/img/details.png",
     imgDesciption: ""
   }, {
     title: "Save Beers You Like",
