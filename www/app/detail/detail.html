@@ -16,7 +16,7 @@
           <p>{{beer.beer_style}}</p>
         </div>
       </div>
-      <button ng-if="!beer.isFavorite" ng-click="showAlertPopUp()" class="button button-energized">
+      <button ng-if="!beer.isFavorite" ng-click="addToFavs()" class="button button-energized">
         <i class="icon ion-heart"></i>&nbsp;Add to Favs
       </button>
       <button ng-if="beer.isFavorite" ng-click="showConfirmPopUp()" class="button button-assertive">

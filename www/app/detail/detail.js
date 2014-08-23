@@ -23,18 +23,19 @@ angular.module('app.detail', [])
     !beer && UtilFactory.navToDefaultState();
     $scope.beer = beer;
 
-    $scope.showAlertPopUp = function() {
-      var config = {
-        title: 'The beer has been added to Favs',
-        cancelType: 'make-invisible',
-        okType: "button-energized"
-      };
+    $scope.addToFavs = function() {
+      // var config = {
+      //   title: 'The beer has been added to Favs',
+      //   cancelType: 'make-invisible',
+      //   okType: "button-energized"
+      // };
       var addToMyBeers = function() {
 
         BeerFactory.addToMyBeers(beer);
         console.log("the beer", BeerFactory.beerRecQueue[beer]);
         BeerFactory.beerRecQueue.splice(BeerFactory.beerRecQueue.indexOf(beer), 1);
-        UtilFactory.navToPrevState();
+        // UtilFactory.navToPrevState();
+
       };
       addToMyBeers();
     };

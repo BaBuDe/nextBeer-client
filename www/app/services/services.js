@@ -210,9 +210,9 @@
         // c.f. http://ionicframework.com/docs/api/service/$ionicPopup/
         $ionicPopup.confirm(config).then(cb).catch(errorHandler);
       };
-      var showAlertPopUp = function(config, cb) {
-        $ionicPopup.confirm(config).then(cb).catch(errorHandler);
-      };
+      // var showAlertPopUp = function(config, cb) {
+      //   $ionicPopup.confirm(config).then(cb).catch(errorHandler);
+      // };
       var navToPrevState = function() {
         $state.go($rootScope.prevState);
       };
@@ -246,7 +246,6 @@
         errorHandler: errorHandler,
         enableCordova: enableCordova,
         showConfirmPopUp: showConfirmPopUp,
-        showAlertPopUp: showAlertPopUp,
         navToPrevState: navToPrevState,
         navToDefaultState: navToDefaultState,
         trackPrevState: trackPrevState
