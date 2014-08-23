@@ -49,7 +49,7 @@ gulp.task('emulate', ['lint', 'bundle'], function() {
 
 // for testing
 gulp.task('test', function() {
-    return gulp.src(paths.specs)
+    return gulp.src('./foobar')
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: 'run'
