@@ -30,10 +30,13 @@ angular.module('app.detail', [])
         okType: "button-energized"
       };
       var addToMyBeers = function() {
+
         BeerFactory.addToMyBeers(beer);
+        console.log("the beer", BeerFactory.beerRecQueue[beer]);
+        BeerFactory.beerRecQueue.splice(BeerFactory.beerRecQueue.indexOf(beer), 1);
         UtilFactory.navToPrevState();
       };
-      UtilFactory.showAlertPopUp(config, addToMyBeers);
+      addToMyBeers();
     };
 
     // pop up for delete confirmation for an item from myBeer
