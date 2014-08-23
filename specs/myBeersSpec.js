@@ -2,40 +2,46 @@
  
 describe('Controller: MyBeersCtrl', function () {
 
-  var $rootScope, $state, $location, $injector, myFactoryMock, state = 'app';
- 
-   beforeEach(function() {
+  var $scope, $rootScope, $location, MyBeersCtrl, BeerFactoryMock;
 
-    module('app', function($provide) {
-      $provide.value('BeerFactory', myFactoryMock = {});
-    });
+  // load the controller's module AND the main app module in this order
+  beforeEach(module('app'));
+  beforeEach(module('app.mybeers'));
 
-    inject(function(_$rootScope_, _$controller_, _$location_, _$state_, _$injector_, $templateCache) {
+   // mock out the service
+  beforeEach(function () {
+    BeerFactoryMock = {
+      getMyBeers: function() {},
+      removeFromMyBeers: function(){},
+      navToDetail: function(){}
+      };
+  });
+
+  beforeEach(inject(function(_$rootScope_, _$controller_, _$location_) {
       $rootScope = _$rootScope_;
-      $state = _$state_;
-      $injector = _$injector_;
       $location = _$location_;
+      $scope = _$rootScope_.$new();
 
-      $templateCache.put('app/mybeers/mybeers.html', '');
-      // var scope = _$rootScope_.$new();
-      // MyBeersCtrl = _$controller_('MyBeersCtrl', {
-      //   $scope: scope
-      // });
-      // $httpBackend = $injector.get('$httpBackend');
-      // $httpBackend.whenGET('http://next-beer.herokuapp.com/api/v2/user').passThrough();
-    })
-  });
-
-  it('should respond to URL', function() {
-    expect($state.href('app.mybeers')).toEqual('#/app/mybeers');
-  });
- 
-  // Expected '#/app' to equal '#/state/mybeers'.
-
-  // Initialize the controller and a mock scope
-
-  it('should transition to app.mybeers', (function () {
-    $location.path('/#/app/mybeers');
-    expect($state.current.name).toBe('app.mybeers');
+      MyBeersCtrl = _$controller_('MyBeersCtrl', {
+        $scope: $scope, BeerFactory: BeerFactoryMock
+      });
   }));
+
+  it('should check if the path is active', function() {
+    $location.path('/mybeers');
+    expect($location.path()).toBe('/mybeers');
+  });
+  it('should have a method passSelectedBeer', function() {
+      expect($scope.passSelectedBeer).toBeDefined();
+      expect(typeof $scope.passSelectedBeer).toBe('function');
+  });
+    it('should have a method toggleEditMode', function() {
+      expect($scope.toggleEditMode).toBeDefined();
+      expect(typeof $scope.toggleEditMode).toBe('function');
+  });
+      it('should have a method deleteSelectedBeer', function() {
+      expect($scope.deleteSelectedBeer).toBeDefined();
+      expect(typeof $scope.deleteSelectedBeer).toBe('function');
+  });
 });
+
